@@ -10,10 +10,57 @@ public class BitOperations {
     }
 
     public static int toInteger(String binary) {
+        if (binary == null) {
+            throw new NullPointerException("binary can not be null");
+        }
         int i = 0;
         int length = binary.length();
         for (int j = 0; j < length; ++j) {
-            i += (binary.charAt(j) - '0') * (1 << (length - j - 1));
+            char ch = binary.charAt(j);
+            if (ch != '0' && ch != '1') {
+                throw new IllegalArgumentException(binary + " is not binary string");
+            }
+            i += (ch - '0') * (1 << (length - j - 1));
+        }
+        return i;
+    }
+
+    public static String toHexString(int i) {
+        final char[] HEX = new char[]{
+                '0', '1', '2', '3', '4',
+                '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F'
+        };
+        StringBuilder hexString = new StringBuilder(8);
+        for (int j = 28; j >= 0; j -= 4) {
+            hexString.append(HEX[(i >> j) & 0XF]);
+        }
+        return hexString.toString();
+    }
+
+    public static int hexToInteger(String hex) {
+        if (hex == null) {
+            throw new NullPointerException("hex can not be null");
+        }
+        int startIndex = 0;
+        if (hex.charAt(0) == '0' && (hex.charAt(1) == 'x' || hex.charAt(1) == 'X')) {
+            startIndex = 2;
+        }
+        int i = 0;
+        int length = hex.length();
+        for (int j = startIndex; j < length; ++j) {
+            int v;
+            char ch = hex.charAt(j);
+            if (ch <= '9') {
+                v = hex.charAt(j) - '0';
+            } else if (ch == 'a' || ch == 'b' || ch == 'c' || ch == 'd' || ch == 'e' || ch == 'f') {
+                v = 10 + ch - 'a';
+            } else if (ch == 'A' || ch == 'B' || ch == 'C' || ch == 'D' || ch == 'E' || ch == 'F') {
+                v = 10 + ch - 'A';
+            } else {
+                throw new IllegalArgumentException(hex + " is not hex string");
+            }
+            i += v * (1 << 4 * (length - j - 1));
         }
         return i;
     }
@@ -57,5 +104,21 @@ public class BitOperations {
         System.out.println("11111111111111111111111101110001 = " + toInteger("11111111111111111111111101110001"));
         System.out.println("11111111111111111111000000000000 = " + toInteger("11111111111111111111000000000000"));
         System.out.println("10000000000000000000000000000000 = " + toInteger("10000000000000000000000000000000"));
+
+        System.out.println("1 = " + toHexString(1));
+        System.out.println("2 = " + toHexString(2));
+        System.out.println("8 = " + toHexString(8));
+        System.out.println("13 = " + toHexString(13));
+        System.out.println("16 = " + toHexString(16));
+        System.out.println("0X18 = " + toHexString(0X18));
+        System.out.println("0X12 = " + toHexString(0X12));
+        System.out.println("max = " + toHexString(Integer.MAX_VALUE));
+
+        System.out.println("0x16 = " + hexToInteger("16"));
+        System.out.println("0x7FFFFFFF = " + hexToInteger("7FFFFFFF"));
+        System.out.println("0x2ac9 = " + hexToInteger("0x2ac9"));
+        System.out.println("0X62A = " + hexToInteger("0X62A"));
+        System.out.println("0X62A = " + Integer.parseInt("62A", 16));
+        // System.out.println("0X62G = " + hexToInteger("0X62G"));
     }
 }
