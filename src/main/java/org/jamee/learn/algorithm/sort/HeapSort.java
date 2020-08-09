@@ -4,13 +4,15 @@ import java.util.*;
 
 /**
  * 堆排序
+ *
+ * https://mp.weixin.qq.com/s/bIuoU6VYl77kJCmKocuBEQ
  */
 public class HeapSort {
     /**
      * 堆
      * <li>大顶堆可以按从小到大排序，可以取最小的 K 个元素</li>
      * <li>小顶堆可以按从大到小排序，可以取最大的 K 个元素</li>
-     * @param <V> 可以比较大小的类型实现 Comparable
+     * @param <V> 可以比较大小的类型，需要实现 Comparable
      */
     private static class Heap<V extends Comparable<V>> {
         // 存储元素的堆
